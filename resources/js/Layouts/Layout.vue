@@ -12,8 +12,13 @@
                     <Link :href="route('home')" class="nav-link">Home</Link>
                 </div>
 
-                <div class="space-x-6">
+                <div v-if="$page.props.auth.user">
+                    <Link :href="route('logout')" method="post" as="button" class="nav-link">Logout</Link>
+                </div>
+
+                <div v-else class="space-x-6">
                     <Link :href="route('register')" class="nav-link">Register</Link>
+                    <Link :href="route('login')" class="nav-link">Login</Link>
                 </div>
             </nav>
         </header>
