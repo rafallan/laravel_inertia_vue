@@ -1,17 +1,32 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-Route::inertia('/', 'Home')->name('home');
+Route::inertia('/', 'Home', ['users' => User::paginate()])->name('home');
 
-Route::inertia('/register', 'Auth/Register')->name('register');
+Route::middleware('auth')->group(function () {
 
-Route::post('/register', [AuthController::class, 'register'])->name('register-user');
+    Route::inertia('/dashboard', 'Dashboard')->name('dashboard');
 
-Route::inertia('/login', 'Auth/Login')->name('login');
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-Route::post('/login', [AuthController::class, 'login'])->name('login-user');
+});
 
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::middleware('guest')->group(function () {
+
+    Route::inertia('/register', 'Auth/Register')->name('register');
+
+    Route::post('/register', [AuthController::class, 'register'])->name('register-user');
+
+    Route::inertia('/login', 'Auth/Login')->name('login');
+
+    Route::post('/login', [AuthController::class, 'login'])->name('login-user');
+
+});
+
+
+
+
